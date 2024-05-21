@@ -19,6 +19,13 @@
         >
             Type 1
         </div>
+        <div
+            class="custom node"
+            on:dragstart={(event) => onDragStart(event, "customNode")}
+            draggable={true}
+        >
+            CustomType
+        </div>
     </div>
 </aside>
 
@@ -51,6 +58,5 @@
         font-weight: 700;
         border-radius: 3px;
         cursor: grab;
-        width: 50px;
     }
 </style>

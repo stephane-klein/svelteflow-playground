@@ -3,8 +3,14 @@
 
     import { SvelteFlow, Controls, Background, BackgroundVariant, MiniMap, useSvelteFlow } from "@xyflow/svelte";
 
+    import CustomNode from "./CustomNode.svelte";
+
     import "@xyflow/svelte/dist/style.css";
     import SideBar from "./Sidebar.svelte";
+
+    const nodeTypes = {
+        customNode: CustomNode
+    };
 
     const nodes = writable([
         {
@@ -72,11 +78,16 @@
     <SvelteFlow
         {nodes}
         {edges}
+        {nodeTypes}
         {snapGrid}
         fitView
         on:dragover={onDragOver}
         on:drop={onDrop}
         on:nodeclick={(event) => console.log("on node click", event.detail.node)}
+        isValidConnection={(connection) => {
+            console.log("connection", connection);
+            return true;
+        }}
     >
         <Controls />
         <Background variant={BackgroundVariant.Dots} />
