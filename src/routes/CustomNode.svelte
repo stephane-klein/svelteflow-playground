@@ -23,7 +23,8 @@
                 "type_2": "Type 2"
             }[data.type]
         )
-    } : { data?.label || "" }
+    } :
+    <input type="text" bind:value={data.label} />
 </div>
 
 
