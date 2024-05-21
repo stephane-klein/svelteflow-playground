@@ -45,4 +45,11 @@
         border: 1px solid black;
         text-align: center;
     }
+    :global(.svelte-flow .svelte-flow__handle.connectingto) {
+        background: #ff6060;
+    }
+
+    :global(.svelte-flow .svelte-flow__handle.valid) {
+        background: #55dd99;
+    }
 </style>
