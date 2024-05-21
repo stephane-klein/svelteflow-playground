@@ -81,6 +81,12 @@
         $nodes.push(newNode);
         $nodes = $nodes;
     };
+
+    function exportData() {
+        console.log("exportData");
+        console.log($nodes);
+        console.log($edges);
+    }
 </script>
 
 <main>
@@ -98,6 +104,7 @@
         <MiniMap />
     </SvelteFlow>
     <SideBar />
+    <button on:click={exportData}>Export</button>
 </main>
 
 <style>
