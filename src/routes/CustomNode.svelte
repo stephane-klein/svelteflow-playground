@@ -2,12 +2,13 @@
     import { Handle, Position } from "@xyflow/svelte";
 
     export let isConnectable;
+    export let data;
 </script>
 
 <Handle type="target" position={Position.Left} {isConnectable} />
 
 <div>
-    Custom Node
+    Custom Node : { data.label }
 </div>
 
 <Handle type="source" position={Position.Right} id="a" {isConnectable} />

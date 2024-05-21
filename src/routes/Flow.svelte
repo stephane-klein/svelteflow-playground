@@ -21,8 +21,8 @@
         },
         {
             id: "2",
-            type: "default",
-            data: { label: "Node" },
+            type: "customNode",
+            data: { label: "Custom Node" },
             position: { x: 0, y: 150 },
         },
     ]);
