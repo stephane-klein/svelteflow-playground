@@ -15,15 +15,21 @@
     const nodes = writable([
         {
             id: "1",
-            type: "default",
-            data: { label: "Input Node" },
-            position: { x: 0, y: 0 },
+            type: "customNode",
+            data: {
+                label: "Type 1",
+                type: "type_1"
+            },
+            position: { x: -150, y: 0 },
         },
         {
             id: "2",
             type: "customNode",
-            data: { label: "Custom Node" },
-            position: { x: 0, y: 150 },
+            data: {
+                label: "Type 2",
+                type: "type_2"
+            },
+            position: { x: 150, y: 0 },
         },
     ]);
 
@@ -63,9 +69,12 @@
 
         const newNode = {
             id: `${Math.random()}`,
-            type,
+            type: "customNode",
             position,
-            data: { label: `${type} node` },
+            data: {
+                label: "",
+                type: type
+            },
             origin: [0.5, 0.0],
         };
 
@@ -83,11 +92,6 @@
         fitView
         on:dragover={onDragOver}
         on:drop={onDrop}
-        on:nodeclick={(event) => console.log("on node click", event.detail.node)}
-        isValidConnection={(connection) => {
-            console.log("connection", connection);
-            return true;
-        }}
     >
         <Controls />
         <Background variant={BackgroundVariant.Dots} />

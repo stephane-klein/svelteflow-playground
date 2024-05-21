@@ -14,17 +14,17 @@
     <div class="nodes-container">
         <div
             class="input-node node"
-            on:dragstart={(event) => onDragStart(event, "default")}
+            on:dragstart={(event) => onDragStart(event, "type_1")}
             draggable={true}
         >
             Type 1
         </div>
         <div
-            class="custom node"
-            on:dragstart={(event) => onDragStart(event, "customNode")}
+            class="input-node node"
+            on:dragstart={(event) => onDragStart(event, "type_2")}
             draggable={true}
         >
-            CustomType
+            Type 2
         </div>
     </div>
 </aside>
