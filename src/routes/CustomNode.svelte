@@ -1,8 +1,17 @@
 <script>
-    import { Handle, Position } from "@xyflow/svelte";
+    import { Handle, Position, useNodes, useEdges } from "@xyflow/svelte";
 
+    export let id;
     export let isConnectable;
     export let data;
+
+    const nodes = useNodes();
+    const edges = useEdges();
+
+    function deleteNode() {
+        $nodes = $nodes.filter((node) => node.id !== id);
+        $edges = $edges.filter((edge) => edge.source !== id && edge.target !== id);
+    }
 </script>
 
 <Handle
@@ -25,6 +34,8 @@
         )
     } :
     <input type="text" bind:value={data.label} />
+
+    <button on:click={deleteNode}>x</button>
 </div>
 
 
