@@ -1,15 +1,70 @@
 <script>
+    import { onMount } from "svelte";
     import { writable } from "svelte/store";
 
-    import { SvelteFlow, Controls, Background, BackgroundVariant, MiniMap, useSvelteFlow } from "@xyflow/svelte";
+    import { SvelteFlow, Controls, Background, BackgroundVariant, MiniMap, Position, useSvelteFlow } from "@xyflow/svelte";
+    import ELK from "elkjs/lib/elk.bundled.js";
 
     import CustomNode from "./CustomNode.svelte";
 
     import "@xyflow/svelte/dist/style.css";
     import SideBar from "./Sidebar.svelte";
 
+    const { fitView } = useSvelteFlow();
+
+    const elk = new ELK();
+
+    function getLayoutedElements(nodes, edges) {
+        const graph = {
+            id: "root",
+            layoutOptions: {
+                "elk.direction": "RIGHT",
+                "elk.algorithm": "layered",
+                "elk.layered.spacing.nodeNodeBetweenLayers": "40",
+                "elk.spacing.nodeNode": "200",
+            },
+            children: nodes.map((node) => ({
+                ...node,
+                // Adjust the target and source handle positions based on the layout
+                // direction.
+                targetPosition: Position.Left,
+                sourcePosition: Position.Right,
+
+                // Hardcode a width and height for elk to use when layouting.
+                width: 250,
+                height: 80,
+            })),
+            edges: edges,
+        };
+
+        return elk
+            .layout(graph)
+            .then((layoutedGraph) => ({
+                nodes: layoutedGraph.children.map((node) => ({
+                    ...node,
+                    // React Flow expects a position property on the node instead of `x`
+                    // and `y` fields.
+                    position: { x: node.x, y: node.y },
+                })),
+
+                edges: layoutedGraph.edges,
+            }))
+            .catch(console.error);
+    }
+
+    function applyLayout() {
+        getLayoutedElements($nodes, $edges).then(({ nodes: layoutedNodes, edges: layoutedEdges }) => {
+            $nodes = layoutedNodes;
+            $edges = layoutedEdges;
+
+            fitView();
+
+            window.requestAnimationFrame(() => fitView());
+        });
+    }
+
     const nodeTypes = {
-        customNode: CustomNode
+        customNode: CustomNode,
     };
 
     const nodes = writable([
@@ -18,7 +73,7 @@
             type: "customNode",
             data: {
                 label: "Type 1",
-                type: "type_1"
+                type: "type_1",
             },
             position: { x: -150, y: 0 },
         },
@@ -27,7 +82,7 @@
             type: "customNode",
             data: {
                 label: "Type 2",
-                type: "type_2"
+                type: "type_2",
             },
             position: { x: 150, y: 0 },
         },
@@ -73,7 +128,7 @@
             position,
             data: {
                 label: "",
-                type: type
+                type: type,
             },
             origin: [0.5, 0.0],
         };
@@ -87,24 +142,20 @@
         console.log($nodes);
         console.log($edges);
     }
+    onMount(() => {
+        applyLayout();
+    });
 </script>
 
 <main>
-    <SvelteFlow
-        {nodes}
-        {edges}
-        {nodeTypes}
-        {snapGrid}
-        fitView
-        on:dragover={onDragOver}
-        on:drop={onDrop}
-    >
+    <SvelteFlow {nodes} {edges} {nodeTypes} {snapGrid} fitView on:dragover={onDragOver} on:drop={onDrop}>
         <Controls />
         <Background variant={BackgroundVariant.Dots} />
         <MiniMap />
     </SvelteFlow>
     <SideBar />
     <button on:click={exportData}>Export</button>
+    <button on:click={applyLayout}>Apply layout</button>
 </main>
 
 <style>
