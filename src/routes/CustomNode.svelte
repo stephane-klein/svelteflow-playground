@@ -16,13 +16,16 @@
 
 <Handle
     type="target"
+    class="customHandle"
     position={Position.Left}
     id={data.type}
     isValidConnection={(event) => {
         return event.sourceHandle != event.targetHandle
     }}
     {isConnectable}
-/>
+>
+    <div class="visibleHandleCircle"></div>
+</Handle>
 
 <div>
     {
@@ -41,13 +44,16 @@
 
 <Handle
     type="source"
+    class="customHandle"
     position={Position.Right}
     id={data.type}
     isValidConnection={(event) => {
         return event.sourceHandle != event.targetHandle
     }}
     {isConnectable}
-/>
+>
+    <div class="visibleHandleCircle"></div>
+</Handle>
 
 <style>
     :global(.svelte-flow__node-customNode) {
@@ -63,5 +69,23 @@
 
     :global(.svelte-flow .svelte-flow__handle.valid) {
         background: #55dd99;
+    }
+    :global(div.customHandle) {
+        width: 30px;
+        height: 30px;
+        background-color: transparent;
+        border:0;
+        z-index: -99;
+    }
+    :global(div.customHandle .visibleHandleCircle) {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 2px;
+        height: 2px;
+        opacity: 1;
+        border: 3px solid #7ea6ff;
+        border-radius: 999px;
+        transform: translate(-4px, -4px);
     }
 </style>
